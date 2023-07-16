@@ -1,0 +1,32 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: harbor-portal
+  namespace: harbor
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`harbor.example.com`)
+      kind: Rule
+      services:
+        - name: harbor-portal
+          namespace: harbor
+          port: 80
+    - match: Host(`harbor.example.com`) && PathPrefix(`/api/`, `/service/`, `/v2/`, `/chartrepo/`, `/c/`)
+      kind: Rule
+      services:
+        - name: harbor-core
+          namespace: harbor
+          port: 80
+    - match: Host(`notary.example.com`)
+      kind: Rule
+      services:
+        - name: notary-server
+          namespace: harbor
+          port: 4443
+  tls:
+    secretName: example-production-tls

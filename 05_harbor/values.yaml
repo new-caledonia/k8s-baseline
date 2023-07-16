@@ -1,0 +1,46 @@
+## @param adminPassword The initial password of Harbor admin. Change it from portal after launching Harbor
+##
+adminPassword: "PASSWORD"
+externalURL: https://harbor.example.com
+
+## @param logLevel The log level used for Harbor services. Allowed values are [ fatal \| error \| warn \| info \| debug \| trace ]
+logLevel: debug
+
+exposureType: ingress
+
+service:
+  type: ClusterIP
+
+persistence:
+  enabled: true
+  ## Resource Policy
+  ## @param persistence.resourcePolicy Setting it to `keep` to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+  # resourcePolicy: 'keep'
+  resourcePolicy: ''
+  persistentVolumeClaim:
+    registry:
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi
+    jobservice:
+      accessModes:
+        - ReadWriteOnce
+      size: 1Gi
+      scanData:
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+    chartmuseum:
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi
+    trivy:
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi
+
+tracing:
+  enabled: false
+
+volumePermissions:
+  enabled: false
