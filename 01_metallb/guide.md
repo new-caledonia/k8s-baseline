@@ -4,7 +4,6 @@
 MetalLB 란?
 쿠버네티스를 위한 베어메탈 로드밸런서입니다.
 
-
 # metallb
 ```
 kubectl apply -f namespace.yaml
@@ -13,7 +12,7 @@ helm repo add metallb https://metallb.github.io/metallb
 
 helm repo update
 
-helm upgrade -i -n metallb metallb metallb/metallb --version 0.13.9
+helm upgrade -i -n metallb-system metallb metallb/metallb
 
 kubectl apply -f address-pool.yaml
 ```
